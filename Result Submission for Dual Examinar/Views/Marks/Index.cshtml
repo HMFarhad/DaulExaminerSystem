@@ -1,0 +1,136 @@
+﻿@model IList<Result_Submission_for_Dual_Examinar.Models.Mark>
+
+@{
+    ViewBag.Title = "Index";
+}
+@{ string type = string.Empty;
+    long teacherId = 0;
+    if (Session["UserType"] != null && Session["UserType"].ToString() != "")
+    {
+        type = Session["UserType"].ToString();
+    }
+    if (type == "teacher")
+    {
+        teacherId = Convert.ToInt64(Session["UserId"].ToString());
+    }
+}
+<h2>Evaluate @Model.FirstOrDefault().Course.Name</h2>
+
+<table border="1" class="table table-bordered table-responsive">
+    <tr>
+        @*<th>
+            Course Name
+        </th>*@
+        <th>
+            Student Name
+        </th>
+        <th>
+            Class Test Marks (Mid)
+        </th>
+        <th>
+            Exam Marks (Mid)
+        </th>
+        <th>
+            Class Test Marks (Final)
+        </th>
+        <th>
+            Exam Marks (Final)
+        </th>
+        <th></th>
+    </tr>
+    @{
+        //int i = 0;
+    }
+
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        using (Html.BeginForm("SaveMark", "Marks", FormMethod.Post, new { @id = "MarkForm_"+ @i }))
+        {
+            <tr>
+                @*<td>
+                    @Html.DisplayFor(modelItem => Model[i].Course.Name)
+                </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].Student.FullName)
+                </td>
+                <td>
+                    @if (type == "admin" || (teacherId > 0 && teacherId == Model[i].Course.MidTeacherId))
+                    {
+                        <input name="MidCTMark" value="@Model[i].MidCTMark" min="0" max="40" placeholder="0-40">
+                        @*@Html.EditorFor(model => @Model[i].MidCTMark, new { htmlAttributes = new { @min = "0", @max = "40", @name = "MidCTMark" } })*@
+                        @Html.ValidationMessageFor(model => @Model[i].MidCTMark)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => Model[i].MidCTMark)
+                    }
+                </td>
+                <td>
+                    @if (type == "admin" || (teacherId > 0 && teacherId == Model[i].Course.MidTeacherId))
+                    {
+                        <input name="MidExamMark" value="@Model[i].MidExamMark" min="0" max="60" placeholder="0-60">
+                        @*@Html.EditorFor(model => @Model[i].MidExamMark, new { htmlAttributes = new { @min = "0", @max = "60", @name = "MidExamMark" } })*@
+                        @Html.ValidationMessageFor(model => @Model[i].MidExamMark)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => Model[i].MidExamMark)
+                    }
+                </td>
+                <td>
+                    @if (type == "admin" || (teacherId > 0 && teacherId == Model[i].Course.FinalTeacherId))
+                    {
+                        <input name="FinalCTMark" value="@Model[i].FinalCTMark" min="0" max="40" placeholder="0-40">
+                        @*@Html.EditorFor(model => @Model[i].FinalCTMark, new { htmlAttributes = new { @min = "0", @max = "40", @name = "FinalCTMark" } })*@
+                        @Html.ValidationMessageFor(model => @Model[i].FinalCTMark)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => Model[i].FinalCTMark)
+                    }
+                </td>
+                <td>
+                    @if (type == "admin" || (teacherId > 0 && teacherId == Model[i].Course.FinalTeacherId))
+                    {
+                        <input name="FinalExamMark" value="@Model[i].FinalExamMark" min="0" max="60" placeholder="0-60">
+                        @*@Html.EditorFor(model => @Model[i].FinalExamMark, new { htmlAttributes = new { @min = "0", @max = "60", @name= "FinalExamMark" } })*@
+                        @Html.ValidationMessageFor(model => @Model[i].FinalExamMark)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => Model[i].FinalExamMark)
+                    }
+                </td>
+                <td>
+                    @if (type == "admin" || teacherId == Model[i].Course.MidTeacherId || teacherId == Model[i].Course.FinalTeacherId)
+                    {
+                        @*@Html.HiddenFor(model => @Model[i].MarkId)
+                            @Html.HiddenFor(model => @Model[i].CourseId)
+                            @Html.HiddenFor(model => @Model[i].StudentId)*@
+                        <input type="hidden" name="MarkId" value="@Model[i].MarkId">
+                        <input type="hidden" name="CourseId" value="@Model[i].CourseId">
+                        <input type="hidden" name="StudentId" value="@Model[i].StudentId">
+                        <button type="button" class="glyphicon-ok" onclick="save(@i)">Save</button>
+                    }
+                    else
+                    {
+                    }
+                </td>
+            </tr>
+        }
+
+    }
+
+</table>
+<script>
+    function save(index) {
+
+        //alert(index);
+        var result = confirm("Confirm Mark for this student ?");
+        if (result == true) {
+            document.getElementById("MarkForm_"+index).submit();
+        } else {
+
+        }
+    }
+</script> 

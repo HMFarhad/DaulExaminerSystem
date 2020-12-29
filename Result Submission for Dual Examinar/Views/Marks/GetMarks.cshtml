@@ -1,0 +1,89 @@
+﻿@model IList<Result_Submission_for_Dual_Examinar.Models.Mark>
+
+@{
+    ViewBag.Title = "Index";
+}
+@{ string type = string.Empty;
+    long teacherId = 0;
+    if (Session["UserType"] != null && Session["UserType"].ToString() != "")
+    {
+        type = Session["UserType"].ToString();
+    }
+    if (type == "teacher")
+    {
+        teacherId = Convert.ToInt64(Session["UserId"].ToString());
+    }
+}
+<h2>Evaluate</h2>
+
+<table border="1" class="table table-bordered table-responsive">
+    <tr>
+        <th>
+            Course Name
+        </th>
+        <th>
+            Student Name
+        </th>
+        <th>
+            Class Test Marks (Mid)
+        </th>
+        <th>
+            Exam Marks (Mid)
+        </th>
+        <th>
+            Class Test Marks (Final)
+        </th>
+        <th>
+            Exam Marks (Final)
+        </th>
+        <th>
+            Result
+        </th>
+    </tr>
+    @{
+        int i = 0;
+    }
+    @foreach (var item in Model)
+    {
+
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Course.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Student.FullName)
+    </td>
+    <td>
+
+        @Html.DisplayFor(modelItem => item.MidCTMark)
+    </td>
+    <td>
+
+        @Html.DisplayFor(modelItem => item.MidExamMark)
+    </td>
+    <td>
+
+        @Html.DisplayFor(modelItem => item.FinalCTMark)
+    </td>
+    <td>
+
+        @Html.DisplayFor(modelItem => item.FinalExamMark)
+    </td>
+    <td>
+        @if (item.Result != -1 && item.Result != -2)
+        {
+            @Html.DisplayFor(modelItem => item.Result)
+        }
+        else if (item.Result == -2)
+        {
+        <span style="color:red"><b> Result not published yet! </b></span>
+        }
+        else
+        {
+            <span style="color:red"><b> Result can not be Generated! Mark deviation is more than 20% </b></span>
+        }
+    </td>
+</tr>
+    }
+
+</table>

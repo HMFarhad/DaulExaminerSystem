@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Dual Examinar</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Dual Examinar", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @if (TempData["Message"] != null && TempData["Message"].ToString().Trim() != "")
+        {
+            if (TempData["Message"].ToString().ToLower().Contains("success"))
+            {
+                <div class="" style="margin-left: 20px; margin-top: 5px;border-radius: 10px;">
+                    <p id="messDisplay" class="lead messDisplay" style="color:green; font:large; font-weight:bold; align-items:center;">@TempData["Message"]</p>
+                </div>
+            }
+            else
+            {
+                <div class="" style="margin-left: 20px; margin-top: 5px;border-radius: 10px;">
+                    <p id="messDisplay" class="lead messDisplay" style="color:red; font:large; font-weight:bold; align-items:center;">@TempData["Message"]</p>
+                </div>
+            }
+
+        }
+        @RenderBody()
+
+    </div>
+    <div class="">
+        <br />
+        <br />
+        <footer>
+            <hr />
+
+            <p style="text-align:center">&copy; @DateTime.Now.Year - Hossain MD Farhad</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+<script>
+    $(function () {
+        $('#messDisplay').delay(2000).hide(500);
+    });
+</script>

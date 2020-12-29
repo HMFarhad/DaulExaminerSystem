@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Result_Submission_for_Dual_Examinar.Models.Course>
+@{ ViewBag.Title = "Course List";
+}
+
+<h2>Course List</h2>
+
+<hr />
+@{ string type = string.Empty;
+    if (Session["UserType"] != null && Session["UserType"].ToString() != "")
+    {
+        type = Session["UserType"].ToString();
+    }
+}
+@if (type == "admin")
+{
+    <p>
+        <button type="button" class="glyphicon-plus">@Html.ActionLink("Add New", "Create")</button>
+    </p>
+}
+
+<table border="1" class="table table-bordered table-responsive">
+    <tr>
+        <th>
+            Course Name
+        </th>
+        <th>
+            Teacher for Mid Term
+        </th>
+        <th>
+            Teacher for Final Term
+        </th>
+        <th>Options</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @item.MidTeacher.FullName
+        </td>
+        <td>
+            @item.FinalTeacher.FullName
+        </td>
+        <td>
+            <span> @Html.ActionLink("Details", "Details", new { id = item.CourseId }) | </span>
+            @if (type == "admin")
+            {
+                <span> @Html.ActionLink("Evaluate", "Index", "Marks", new { id = item.CourseId }, null) | </span>
+
+                <span> @Html.ActionLink("Edit", "Edit", new { id = item.CourseId }) | </span>
+
+                <span> @Html.ActionLink("Delete", "Delete", new { id = item.CourseId }) |  </span>
+            }
+            else if (type == "teacher")
+            {
+                <span> @Html.ActionLink("Evaluate", "Index", "Marks", new { id = item.CourseId }, null)  | </span>
+            }
+            <button> @Html.ActionLink("Show Result", "GetMarks", "Marks", new { id = item.CourseId }, null)  </button>
+
+        </td>
+    </tr>}
+</table>
